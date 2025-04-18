@@ -417,13 +417,14 @@ static void http_auth_digest_sha256(void)
 #endif
 
 #if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE
-static void https_with_url(void)
+static void https_with_url(char *url)
 {
     esp_http_client_config_t config = {
-        .url = "https://www.howsmyssl.com",
+        .url = url,
         .event_handler = _http_event_handler,
         .crt_bundle_attach = esp_crt_bundle_attach,
     };
+    ESP_LOGI(TAG, "https_with_url %s", config.url);
     esp_http_client_handle_t client = esp_http_client_init(&config);
     esp_err_t err = esp_http_client_perform(client);
 
@@ -818,33 +819,34 @@ static void http_partial_download(void)
 
 static void http_test_task(void *pvParameters)
 {
-    http_rest_with_url();
-    http_rest_with_hostname_path();
-#if CONFIG_ESP_HTTP_CLIENT_ENABLE_BASIC_AUTH
-    http_auth_basic();
-    http_auth_basic_redirect();
-#endif
-#if CONFIG_ESP_HTTP_CLIENT_ENABLE_DIGEST_AUTH
-    http_auth_digest_md5();
-    http_auth_digest_sha256();
-#endif
-    http_encoded_query();
-    http_relative_redirect();
-    http_absolute_redirect();
-    http_absolute_redirect_manual();
-#if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE
-    https_with_url();
-#endif
-    https_with_hostname_path();
-    http_redirect_to_https();
-    http_download_chunk();
-    http_perform_as_stream_reader();
-    https_async();
-    https_with_invalid_url();
-    http_native_request();
-#if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE
-    http_partial_download();
-#endif
+//    http_rest_with_url();
+//     http_rest_with_hostname_path();
+// #if CONFIG_ESP_HTTP_CLIENT_ENABLE_BASIC_AUTH
+//     http_auth_basic();
+//     http_auth_basic_redirect();
+// #endif
+// #if CONFIG_ESP_HTTP_CLIENT_ENABLE_DIGEST_AUTH
+//     http_auth_digest_md5();
+//     http_auth_digest_sha256();
+// #endif
+//     http_encoded_query();
+//     http_relative_redirect();
+//     http_absolute_redirect();
+//     http_absolute_redirect_manual();
+// #if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE
+    https_with_url("https://ipv4.jamieweb.net/");
+    https_with_url("https://ipv6.jamieweb.net/");
+// #endif
+//    https_with_hostname_path();
+//     http_redirect_to_https();
+//     http_download_chunk();
+//     http_perform_as_stream_reader();
+//     https_async();
+//     https_with_invalid_url();
+//     http_native_request();
+// #if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE
+//     http_partial_download();
+// #endif
 
     ESP_LOGI(TAG, "Finish http example");
 #if !CONFIG_IDF_TARGET_LINUX
